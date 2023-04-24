@@ -1,4 +1,85 @@
 # SuperMarket Tables
+create table products(
+	prod_id serial primary key,
+	prod_name varchar(20),
+	category_name varchar(20)	
+);
+create table vendors(
+Vendor_id int,
+vendor_name varchar(20),
+	prod_id int references products(prod_id),
+available int,
+primary key(Vendor_id,prod_id));
+insert into products values(1,'Santoor','Soap');
+insert into products values(2,'Meera','Shampoo');
+select * from products;
+insert into  vendors values(1,'Akshaya',1,100);
+insert into  vendors values(2,'Beulah',1,200);
+select * from vendors;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 create table Master_Entry(products varchar(20) , prod_category varchar(20),open_stock int, vendor varchar(20),primary key(products,vendor));
 insert into Master_Entry values('Apples','Fruits',2000,'Alex')
 insert into Master_Entry values('Apples','Fruits',3000,'Robin')
@@ -31,4 +112,54 @@ insert into Sales values('Santoor','Soap',10,'Robin','01-08-2023')
 
 insert into Sales values('Colgate','Toothpaste',20,'Tim','04-23-2023')
 
+
+
+
+
+
+
+
 insert into Sales values('Meera','Shampoo',60,'Sam','04-20-2023')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
