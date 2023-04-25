@@ -146,7 +146,7 @@ class superMarketApplication {
 
 										// for updating reports Table
 										Timestamp ts = Timestamp.from(Instant.now());
-										double totalPrice = asked( vUp +vGst);
+										double totalPrice =  (asked * vUp) +(asked *vGst);
 										query3 = "insert into akReports values(" + pid + "," + vid + ",'Purchase','"
 												+ ts + "'," + totalPrice + ")";
 										cs.executeUpdate(query3);
