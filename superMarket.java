@@ -32,6 +32,8 @@ class superMarketApplication extends Frame {
 	Image img;
 
 	public superMarketApplication() {
+
+		// mf main FRame which displays CUstomer and Owner
 		Frame mf = new Frame();
 		// Label Creation
 		Label ll = new Label("Super Market");
@@ -85,10 +87,572 @@ class superMarketApplication extends Frame {
 				b2.setBounds(540, 270, 70, 30);
 				Button b3 = new Button("Master_Entry");
 				b3.setBounds(630, 360, 90, 30);
-				Button b4 = new Button("Stocks");
-				b4.setBounds(740, 270, 70, 30);
+				// Button b4 = new Button("Stocks");
+				// b4.setBounds(740, 270, 70, 30);
 				Button b5 = new Button("Reports");
 				b5.setBounds(830, 360, 70, 30);
+
+				// MasterEntry Table
+				b3.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent ae) {
+						Frame me = new Frame();
+
+						// Label Creation
+						Label ll = new Label("Super Market");
+						ll.setBounds(520, 40, 350, 40);
+						ll.setFont(new Font("Bold", 70, 30));
+						// ll.setForeground(Color.LIGHT_GRAY);
+						ll.setBackground(Color.lightGray);
+						me.add(ll);
+
+						TextArea tar = new TextArea();
+						tar.setBounds(200, 120, 400, 200);
+						me.add(tar);
+						TextArea tar1 = new TextArea();
+						tar1.setBounds(200, 350, 400, 200);
+						me.add(tar1);
+						TextArea tar2 = new TextArea();
+						tar2.setBounds(200, 580, 400, 200);
+						me.add(tar2);
+
+						query = "select * from akproducts ";
+						String query1 = "select * from akStocks ";
+						String query2 = "select * from akVendors ";
+						String y = "PRODUCTS TABLE \n\n\n"
+								+ "PRODUCT_ID    PRODUCT_NAME    CATEGORY    GST      UNIT_PRICE  \n";
+						try {
+
+							Class.forName("org.postgresql.Driver");
+							con = DriverManager.getConnection(
+									"jdbc:postgresql://192.168.110.48:5432/plf_training?user=plf_training_admin&password=pff123");
+							Statement cs = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+									ResultSet.CONCUR_UPDATABLE);
+							// PRoducts TAble setting
+							rs = cs.executeQuery(query);
+							rs.absolute(1);
+							while (rs.next()) {
+								y += rs.getInt(1) + "                           " + rs.getString(2)
+										+ "                  " + rs.getString(3) + "             " + rs.getDouble(4)
+										+ "               " + rs.getDouble(5) + "\n";
+							}
+							tar.setText(y);
+
+							// Stocks Table Setting
+							y = "STOCKS TABLE \n\n\n" + "PRODUCT_ID    VENDOR_ID   STOCK_COUNT  \n";
+							rs = cs.executeQuery(query1);
+							rs.absolute(1);
+							while (rs.next()) {
+								y += rs.getInt(1) + "                             " + rs.getInt(2)
+										+ "                      " + rs.getInt(3) + " \n";
+							}
+							tar1.setText(y);
+
+							// Vendors Table Setting
+							y = "VENDORS TABLE \n\n\n"
+									+ "PRODUCT_ID    VENDOR_ID       NAME       AVAILABLE         GST       UNIT_PRICE  \n";
+							rs = cs.executeQuery(query2);
+							rs.absolute(1);
+							while (rs.next()) {
+								y += rs.getInt(1) + "                           " + rs.getInt(2)
+										+ "                           " + rs.getString(3) + "           " + rs.getInt(4)
+										+ "            " + rs.getDouble(5) + "                 " + rs.getDouble(6)
+										+ "\n";
+							}
+							tar2.setText(y);
+						} catch (Exception exe) {
+							System.out.println(exe);
+						}
+
+						// Background Image
+						ImageIcon background_img = new ImageIcon("D:\\TEST\\Akshaya\\src\\JavaCore\\background1.JPG");
+						JLabel background = new JLabel("", background_img, JLabel.CENTER);
+						Image img = background_img.getImage();
+						Image temp_img = img.getScaledInstance(1200, 800, Image.SCALE_SMOOTH);
+						background_img = new ImageIcon(temp_img);
+						background.setBounds(0, 0, 1200, 800);
+						me.add(background);
+						me.setLayout(null);
+						me.setSize(1200, 800);
+						me.setTitle("SuperMarket");
+						me.setVisible(true);
+						me.setBackground(Color.lightGray);
+						me.addWindowListener(new WindowAdapter() {
+							public void windowClosing(WindowEvent we) {
+								me.dispose();
+
+							}
+						});
+					}
+				});
+
+				// Reports BUtton Functionality in OWNER
+				b5.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent ae) {
+						Frame fr = new Frame();
+
+						// Label Creation
+						Label ll = new Label("Super Market");
+						ll.setBounds(520, 40, 350, 40);
+						ll.setFont(new Font("Bold", 70, 30));
+						// ll.setForeground(Color.LIGHT_GRAY);
+						ll.setBackground(Color.lightGray);
+						fr.add(ll);
+
+						// Buttons In Reports
+						Button b1 = new Button("Items With Reorder Level");
+						b1.setBounds(520, 140, 170, 50);
+						Button b2 = new Button("Daily Sales");
+						b2.setBounds(520, 240, 170, 50);
+						Button b3 = new Button("Sales Between Two dates");
+						b3.setBounds(520, 340, 170, 50);
+						Button b4 = new Button("GST Report");
+						b4.setBounds(520, 440, 170, 50);
+						Button b5 = new Button("Purchases Between Two dates");
+						b5.setBounds(520, 540, 170, 50);
+
+						// Items With Reorder Level button Funtionality
+						b1.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent ae) {
+								Frame fr1 = new Frame();
+
+								// Label Creation
+								Label ll = new Label("Super Market");
+								ll.setBounds(520, 40, 350, 40);
+								ll.setFont(new Font("Bold", 70, 30));
+								// ll.setForeground(Color.LIGHT_GRAY);
+								ll.setBackground(Color.lightGray);
+								fr1.add(ll);
+
+								TextArea t1 = new TextArea();
+								t1.setBounds(300, 100, 500, 400);
+								fr1.add(t1);
+								// Result set of Reports
+								query = "select * from akStocks where stockCount<5";
+								String y = "ITEMS WHICH ARE LESS THAN COUNT 5 \n\n\n"
+										+ "PRODUCT_ID  |  VENDOR_ID   |  AVAILABLE  \n";
+								try {
+
+									Class.forName("org.postgresql.Driver");
+									con = DriverManager.getConnection(
+											"jdbc:postgresql://192.168.110.48:5432/plf_training?user=plf_training_admin&password=pff123");
+									Statement cs = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+											ResultSet.CONCUR_UPDATABLE);
+									rs = cs.executeQuery(query);
+									while (rs.next()) {
+										y += rs.getInt(1) + "                          | " + rs.getInt(2)
+												+ "                         | " + rs.getInt(3) + "\n";
+									}
+									t1.setText(y);
+								} catch (Exception exe) {
+									System.out.println(exe);
+								}
+
+								// Background Image
+								ImageIcon background_img = new ImageIcon(
+										"D:\\TEST\\Akshaya\\src\\JavaCore\\background1.JPG");
+								JLabel background = new JLabel("", background_img, JLabel.CENTER);
+								Image img = background_img.getImage();
+								Image temp_img = img.getScaledInstance(1024, 683, Image.SCALE_SMOOTH);
+								background_img = new ImageIcon(temp_img);
+								background.setBounds(0, 0, 1200, 800);
+								fr1.add(background);
+								fr1.setLayout(null);
+								fr1.setSize(1200, 800);
+								fr1.setTitle("SuperMarket");
+								fr1.setVisible(true);
+								fr1.setBackground(Color.lightGray);
+								fr1.addWindowListener(new WindowAdapter() {
+									public void windowClosing(WindowEvent we) {
+										fr1.dispose();
+
+									}
+								});
+
+							}
+						});
+
+						// Daily Sales button Funtionality
+						b2.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent ae) {
+								Frame fr1 = new Frame();
+
+								// Label Creation
+								Label ll = new Label("Super Market");
+								ll.setBounds(520, 40, 350, 40);
+								ll.setFont(new Font("Bold", 70, 30));
+								// ll.setForeground(Color.LIGHT_GRAY);
+								ll.setBackground(Color.lightGray);
+								fr1.add(ll);
+
+								TextArea t1 = new TextArea();
+								t1.setBounds(300, 100, 500, 400);
+								fr1.add(t1);
+								// Result set of Reports
+								query = "Select * from akReports where s_type='Purchase' and extract(year from s_date)=extract(year from current_date)\r\n"
+										+ "and extract(month from s_date)=extract(month from current_date)\r\n"
+										+ "and extract(day from s_date)=extract(day from current_date);";
+								String y = "  PRODUCT_ID    |  VENDOR_ID     |      TYPE      | QUANTITY   \n";
+								try {
+
+									Class.forName("org.postgresql.Driver");
+									con = DriverManager.getConnection(
+											"jdbc:postgresql://192.168.110.48:5432/plf_training?user=plf_training_admin&password=pff123");
+									Statement cs = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+											ResultSet.CONCUR_UPDATABLE);
+									rs = cs.executeQuery(query);
+									while (rs.next()) {
+										y += rs.getInt(1) + "                              |    " + rs.getInt(2)
+												+ "          |       " + rs.getString(3) + "   |   " + rs.getDouble(5)
+												+ "\n";
+									}
+									t1.setText(y);
+								} catch (Exception exe) {
+									System.out.println(exe);
+								}
+
+								// Background Image
+								ImageIcon background_img = new ImageIcon(
+										"D:\\TEST\\Akshaya\\src\\JavaCore\\background1.JPG");
+								JLabel background = new JLabel("", background_img, JLabel.CENTER);
+								Image img = background_img.getImage();
+								Image temp_img = img.getScaledInstance(1024, 683, Image.SCALE_SMOOTH);
+								background_img = new ImageIcon(temp_img);
+								background.setBounds(0, 0, 1200, 800);
+
+								fr1.add(background);
+								fr1.setLayout(null);
+								fr1.setSize(1200, 800);
+								fr1.setTitle("SuperMarket");
+								fr1.setVisible(true);
+								fr1.setBackground(Color.lightGray);
+								fr1.addWindowListener(new WindowAdapter() {
+									public void windowClosing(WindowEvent we) {
+										fr1.dispose();
+
+									}
+								});
+							}
+						});
+
+						// Sales Between Two dates button Funtionality
+						b3.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent ae) {
+
+								Frame fr1 = new Frame();
+
+								// Label Creation
+								Label ll = new Label("Date-1");
+								ll.setBounds(300, 120, 70, 30);
+								// ll.setFont(new Font("Bold", 70, 30));
+								// ll.setForeground(Color.LIGHT_GRAY);
+								ll.setBackground(Color.lightGray);
+								fr1.add(ll);
+
+								TextField trx1 = new TextField();
+								trx1.setBounds(400, 120, 70, 30);
+								fr1.add(trx1);
+
+								// two Labels Two Buttons
+								Label ll1 = new Label("Date-2");
+								ll1.setBounds(300, 160, 70, 30);
+								// ll1.setFont(new Font("Bold", 70, 30));
+								// ll.setForeground(Color.LIGHT_GRAY);
+								ll1.setBackground(Color.lightGray);
+								fr1.add(ll1);
+								TextField trx2 = new TextField();
+								trx2.setBounds(400, 160, 70, 30);
+								fr1.add(trx2);
+
+								Label ll2 = new Label("Super Market");
+								ll2.setBounds(520, 40, 350, 40);
+								ll2.setFont(new Font("Bold", 70, 30));
+								// ll.setForeground(Color.LIGHT_GRAY);
+								ll2.setBackground(Color.lightGray);
+								fr1.add(ll2);
+
+								Button rb = new Button("ENTER");
+								rb.setBounds(350, 200, 50, 30);
+								fr1.add(rb);
+								TextArea t1x = new TextArea();
+								t1x.setBounds(300, 300, 500, 400);
+								fr1.add(t1x);
+								rb.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent ae) {
+										String a = trx1.getText();
+										String b = trx2.getText();
+										String[] arrOfStr = a.split("/");
+										int p = Integer.parseInt(arrOfStr[0]);
+										int q = Integer.parseInt(arrOfStr[1]);
+										int r = Integer.parseInt(arrOfStr[2]);
+										String[] arrOfStr1 = b.split("/");
+										int x = Integer.parseInt(arrOfStr1[0]);
+										int y = Integer.parseInt(arrOfStr1[1]);
+										int z = Integer.parseInt(arrOfStr1[2]);
+
+										query = "select * from akReports where S_type='Sales' and extract(year from S_date)>="
+												+ r + "  and extract(day from S_date)>=" + p
+												+ " and extract(month from S_date)>=" + q + " \r\n"
+												+ "and extract(year from S_date)<=" + z
+												+ "  and extract(day from S_date)<=" + x
+												+ " and extract(month from S_date)<=" + y + ";";
+										// Result set of Reports
+
+										String yx = "  PRODUCT_ID    |  VENDOR_ID     |      TYPE    |      PRICE     |      QUANTITY   \n";
+										try {
+
+											Class.forName("org.postgresql.Driver");
+											con = DriverManager.getConnection(
+													"jdbc:postgresql://192.168.110.48:5432/plf_training?user=plf_training_admin&password=pff123");
+											Statement cs = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+													ResultSet.CONCUR_UPDATABLE);
+											rs = cs.executeQuery(query);
+											while (rs.next()) {
+												yx += rs.getInt(1) + "                              |    "
+														+ rs.getInt(2) + "                 |       " + rs.getString(3)
+														+ "                    |   " + rs.getDouble(5)
+														+ "               |     " + rs.getInt(6) + "\n";
+											}
+											t1x.setText(yx);
+										} catch (Exception exe) {
+											System.out.println(exe);
+										}
+
+									}
+								});
+
+								// Background Image
+								ImageIcon background_img = new ImageIcon(
+										"D:\\TEST\\Akshaya\\src\\JavaCore\\background1.JPG");
+								JLabel background = new JLabel("", background_img, JLabel.CENTER);
+								Image img = background_img.getImage();
+								Image temp_img = img.getScaledInstance(1024, 683, Image.SCALE_SMOOTH);
+								background_img = new ImageIcon(temp_img);
+								background.setBounds(0, 0, 1200, 800);
+
+								fr1.add(background);
+								fr1.setLayout(null);
+								fr1.setSize(1200, 800);
+								fr1.setTitle("SuperMarket");
+								fr1.setVisible(true);
+								fr1.setBackground(Color.lightGray);
+								fr1.addWindowListener(new WindowAdapter() {
+									public void windowClosing(WindowEvent we) {
+										fr1.dispose();
+
+									}
+								});
+							}
+						});
+
+						// GST Report button Funtionality
+						b4.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent ae) {
+								Frame fr1 = new Frame();
+
+								// Label Creation
+								Label ll = new Label("Super Market");
+								ll.setBounds(520, 40, 350, 40);
+								ll.setFont(new Font("Bold", 70, 30));
+								// ll.setForeground(Color.LIGHT_GRAY);
+								ll.setBackground(Color.lightGray);
+								fr1.add(ll);
+								String purchaseGST = "\r\n"
+										+ "select sum(r.quantity*v.v_gst) from akvendors v,akReports r where r.S_type='Purchase'"
+										+ " and v.prod_id=r.pid and v.Vendor_id=r.vid group by r.S_type='Purchase';";
+								String salesGST = "select sum(r.quantity*v.gst) from akproducts v,akReports r where r.S_type='Sales'\r\n"
+										+ "and v.prod_id=r.pid  group by r.S_type='Sales';\r\n" + "\r\n" + "";
+
+								Label llx1 = new Label("Sales GST Report:");
+								llx1.setBounds(250, 200, 150, 40);
+								fr1.add(llx1);
+								TextField tax1 = new TextField();
+								tax1.setBounds(430, 200, 90, 40);
+								Label llx2 = new Label("Purchase GST Report:");
+								llx2.setBounds(250, 260, 150, 40);
+								fr1.add(llx2);
+								TextField tax2 = new TextField();
+								tax2.setBounds(430, 260, 90, 40);
+
+								String yxt = "";
+								try {
+
+									Class.forName("org.postgresql.Driver");
+									con = DriverManager.getConnection(
+											"jdbc:postgresql://192.168.110.48:5432/plf_training?user=plf_training_admin&password=pff123");
+									Statement cs = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+											ResultSet.CONCUR_UPDATABLE);
+									rs = cs.executeQuery(purchaseGST);
+									rs.absolute(1);
+									tax2.setText(rs.getString(1));
+									rs = cs.executeQuery(salesGST);
+									rs.absolute(1);
+									tax1.setText(rs.getString(1));
+								} catch (Exception exe) {
+									System.out.println(exe);
+								}
+
+								fr1.add(tax2);
+								fr1.add(tax1);
+
+								// Background Image
+								ImageIcon background_img = new ImageIcon(
+										"D:\\TEST\\Akshaya\\src\\JavaCore\\background1.JPG");
+								JLabel background = new JLabel("", background_img, JLabel.CENTER);
+								Image img = background_img.getImage();
+								Image temp_img = img.getScaledInstance(1024, 683, Image.SCALE_SMOOTH);
+								background_img = new ImageIcon(temp_img);
+								background.setBounds(0, 0, 1200, 800);
+								fr1.add(background);
+								fr1.setLayout(null);
+								fr1.setSize(1200, 800);
+								fr1.setTitle("SuperMarket");
+								fr1.setVisible(true);
+								fr1.setBackground(Color.lightGray);
+								fr1.addWindowListener(new WindowAdapter() {
+									public void windowClosing(WindowEvent we) {
+										fr1.dispose();
+
+									}
+								});
+							}
+						});
+
+						// Purchases Between Two dates button Funtionality
+						b5.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent ae) {
+								Frame fr1 = new Frame();
+
+								// Label Creation
+								Label ll = new Label("Date-1");
+								ll.setBounds(300, 120, 70, 30);
+								// ll.setFont(new Font("Bold", 70, 30));
+								// ll.setForeground(Color.LIGHT_GRAY);
+								ll.setBackground(Color.lightGray);
+								fr1.add(ll);
+
+								TextField trx1 = new TextField();
+								trx1.setBounds(400, 120, 70, 30);
+								fr1.add(trx1);
+
+								// two Labels Two Buttons
+								Label ll1 = new Label("Date-2");
+								ll1.setBounds(300, 160, 70, 30);
+								// ll1.setFont(new Font("Bold", 70, 30));
+								// ll.setForeground(Color.LIGHT_GRAY);
+								ll1.setBackground(Color.lightGray);
+								fr1.add(ll1);
+								TextField trx2 = new TextField();
+								trx2.setBounds(400, 160, 70, 30);
+								fr1.add(trx2);
+
+								Label ll2 = new Label("Super Market");
+								ll2.setBounds(520, 40, 350, 40);
+								ll2.setFont(new Font("Bold", 70, 30));
+								// ll.setForeground(Color.LIGHT_GRAY);
+								ll2.setBackground(Color.lightGray);
+								fr1.add(ll2);
+
+								Button rb = new Button("ENTER");
+								rb.setBounds(350, 200, 50, 30);
+								fr1.add(rb);
+								TextArea t1x = new TextArea();
+								t1x.setBounds(300, 300, 500, 400);
+								fr1.add(t1x);
+								rb.addActionListener(new ActionListener() {
+									public void actionPerformed(ActionEvent ae) {
+										String a = trx1.getText();
+										String b = trx2.getText();
+										String[] arrOfStr = a.split("/");
+										int p = Integer.parseInt(arrOfStr[0]);
+										int q = Integer.parseInt(arrOfStr[1]);
+										int r = Integer.parseInt(arrOfStr[2]);
+										String[] arrOfStr1 = b.split("/");
+										int x = Integer.parseInt(arrOfStr1[0]);
+										int y = Integer.parseInt(arrOfStr1[1]);
+										int z = Integer.parseInt(arrOfStr1[2]);
+
+										query = "select * from akReports where S_type='Purchase' and extract(year from S_date)>="
+												+ r + "  and extract(day from S_date)>=" + p
+												+ " and extract(month from S_date)>=" + q + " \r\n"
+												+ "and extract(year from S_date)<=" + z
+												+ "  and extract(day from S_date)<=" + x
+												+ " and extract(month from S_date)<=" + y + ";";
+										// Result set of Reports
+
+										String yx = "  PRODUCT_ID    |  VENDOR_ID     |      TYPE    |      PRICE     |      QUANTITY   \n";
+										try {
+
+											Class.forName("org.postgresql.Driver");
+											con = DriverManager.getConnection(
+													"jdbc:postgresql://192.168.110.48:5432/plf_training?user=plf_training_admin&password=pff123");
+											Statement cs = con.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE,
+													ResultSet.CONCUR_UPDATABLE);
+											rs = cs.executeQuery(query);
+											while (rs.next()) {
+												yx += rs.getInt(1) + "                              |    "
+														+ rs.getInt(2) + "                 |       " + rs.getString(3)
+														+ "                    |   " + rs.getDouble(5)
+														+ "               |     " + rs.getInt(6) + "\n";
+											}
+											t1x.setText(yx);
+										} catch (Exception exe) {
+											System.out.println(exe);
+										}
+
+									}
+								});
+
+								// Background Image
+								ImageIcon background_img = new ImageIcon(
+										"D:\\TEST\\Akshaya\\src\\JavaCore\\background1.JPG");
+								JLabel background = new JLabel("", background_img, JLabel.CENTER);
+								Image img = background_img.getImage();
+								Image temp_img = img.getScaledInstance(1024, 683, Image.SCALE_SMOOTH);
+								background_img = new ImageIcon(temp_img);
+								background.setBounds(0, 0, 1200, 800);
+
+								fr1.add(background);
+								fr1.setLayout(null);
+								fr1.setSize(1200, 800);
+								fr1.setTitle("SuperMarket");
+								fr1.setVisible(true);
+								fr1.setBackground(Color.lightGray);
+								fr1.addWindowListener(new WindowAdapter() {
+									public void windowClosing(WindowEvent we) {
+										fr1.dispose();
+
+									}
+								});
+							}
+						});
+
+						fr.add(b1);
+						fr.add(b2);
+						fr.add(b3);
+						fr.add(b4);
+						fr.add(b5);
+						// Background Image
+						ImageIcon background_img = new ImageIcon("D:\\TEST\\Akshaya\\src\\JavaCore\\background1.JPG");
+						JLabel background = new JLabel("", background_img, JLabel.CENTER);
+						Image img = background_img.getImage();
+						Image temp_img = img.getScaledInstance(1024, 683, Image.SCALE_SMOOTH);
+						background_img = new ImageIcon(temp_img);
+						background.setBounds(0, 0, 1200, 800);
+						fr.add(background);
+						fr.setLayout(null);
+						fr.setSize(1200, 800);
+						fr.setTitle("SuperMarket");
+						fr.setVisible(true);
+						fr.setBackground(Color.lightGray);
+						fr.addWindowListener(new WindowAdapter() {
+							public void windowClosing(WindowEvent we) {
+								fr.dispose();
+
+							}
+						});
+
+					}
+				});
 
 				// On clicking Purchase Button new Frame opens enter the details from who and how much you want to
 				// purchase and
@@ -179,8 +743,8 @@ class superMarketApplication extends Frame {
 													}
 												}
 												if (count == 1)
-													query2 = "update akStocks set count=" + (count + asked)
-															+ "where pid=" + pid + "and vid=" + vid;
+													query2 = "update akStocks set count= (count " + asked
+															+ ")where pid=" + pid + "and vid=" + vid;
 												else
 													query2 = "insert into akStocks values(" + pid + "," + vid + ","
 															+ asked + ")";
@@ -190,7 +754,7 @@ class superMarketApplication extends Frame {
 												Timestamp ts = Timestamp.from(Instant.now());
 												double totalPrice = (asked * vUp) + (asked * vGst);
 												query3 = "insert into akReports values(" + pid + "," + vid
-														+ ",'Purchase','" + ts + "'," + totalPrice + ")";
+														+ ",'Purchase','" + ts + "'," + totalPrice + "," + asked + ")";
 												cs.executeUpdate(query3);
 												break;
 											} else {
@@ -215,6 +779,14 @@ class superMarketApplication extends Frame {
 						f1.add(l2);
 						f1.add(tf2);
 						f1.add(ta);
+						// Background Image
+						ImageIcon background_img = new ImageIcon("D:\\TEST\\Akshaya\\src\\JavaCore\\background1.JPG");
+						JLabel background = new JLabel("", background_img, JLabel.CENTER);
+						Image img = background_img.getImage();
+						Image temp_img = img.getScaledInstance(1024, 683, Image.SCALE_SMOOTH);
+						background_img = new ImageIcon(temp_img);
+						background.setBounds(0, 0, 1200, 800);
+						f1.add(background);
 						f1.setLayout(null);
 						f1.setSize(1300, 1300);
 						f1.setTitle("SuperMarket");
@@ -222,7 +794,7 @@ class superMarketApplication extends Frame {
 						f1.setBackground(Color.lightGray);
 						f1.addWindowListener(new WindowAdapter() {
 							public void windowClosing(WindowEvent we) {
-								System.exit(0);
+								f1.dispose();
 
 							}
 						});
@@ -237,7 +809,7 @@ class superMarketApplication extends Frame {
 				// f.add(b1);
 				f.add(b2);
 				f.add(b3);
-				f.add(b4);
+				// f.add(b4);
 				f.add(b5);
 
 				ImageIcon background_img = new ImageIcon("D:\\TEST\\Akshaya\\src\\JavaCore\\background1.JPG");
@@ -255,7 +827,7 @@ class superMarketApplication extends Frame {
 				// f.setBackground(Color.lightGray);
 				f.addWindowListener(new WindowAdapter() {
 					public void windowClosing(WindowEvent we) {
-						System.exit(0);
+						f.dispose();
 					}
 
 				});
@@ -329,13 +901,13 @@ class superMarketApplication extends Frame {
 						tf3.setBounds(600, 300, 100, 30);
 
 						// Enter Button
-						Button b11 = new Button("Enter");
+						Button b11 = new Button("BUY");
 						b11.setBounds(540, 370, 70, 30);
 						b11.addActionListener(new ActionListener() {
 							public void actionPerformed(ActionEvent ae) {
 								try {
 									int asked = Integer.parseInt(tf3.getText());
-									System.out.println("Asked is" + asked);
+									System.out.println("Asked is :" + asked);
 
 									Class.forName("org.postgresql.Driver");
 									Connection con = DriverManager.getConnection(
@@ -347,13 +919,11 @@ class superMarketApplication extends Frame {
 									String query1 = ""; // to update stocks quantity on purchasing
 									String query2 = "";// to update reports table on purchasing
 									rs.absolute(0);
-									double Gst;
-									double Up;
 									while (rs.next()) {
-										if (rs.getInt(2) == vid && rs.getInt(1) == pid) {
+										if (rs.getInt(1) == pid && rs.getInt(2) == vid) {
 											if (rs.getInt(6) > asked) {
-												Gst = rs.getDouble(4);
-												Up = rs.getDouble(5);
+												double Gst = rs.getDouble(4);
+												double Up = rs.getDouble(5);
 												int x = rs.getInt(6) - asked;
 												query1 = "update akStocks set stockCount=" + x + " where pid=" + pid
 														+ " and vid=" + vid + "";
@@ -364,7 +934,7 @@ class superMarketApplication extends Frame {
 												Timestamp ts = Timestamp.from(Instant.now());
 												double totalPrice = (asked * Up) + (asked * Gst);
 												query2 = "insert into akReports values(" + pid + "," + vid
-														+ ",'Sales','" + ts + "'," + totalPrice + ")";
+														+ ",'Sales','" + ts + "'," + totalPrice + "," + asked + ")";
 												cs.executeUpdate(query2);
 
 												break;
@@ -398,7 +968,7 @@ class superMarketApplication extends Frame {
 						fcp.setBackground(Color.lightGray);
 						fcp.addWindowListener(new WindowAdapter() {
 							public void windowClosing(WindowEvent we) {
-								System.exit(0);
+								fcp.dispose();
 
 							}
 						});
@@ -414,7 +984,7 @@ class superMarketApplication extends Frame {
 				fc.setBackground(Color.lightGray);
 				fc.addWindowListener(new WindowAdapter() {
 					public void windowClosing(WindowEvent we) {
-						System.exit(0);
+						fc.dispose();
 					}
 
 				});
